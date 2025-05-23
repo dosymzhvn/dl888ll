@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>Романтическое послание 💖</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://fonts.googleapis.com/css2?family=Bad+Script&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background: linear-gradient(135deg, #ffe6f0, #ffd6e7);
+      font-family: 'Bad Script', cursive;
+      overflow-x: hidden;
+      text-align: center;
+      padding: 10px;
+      position: relative;
+    }
+    .music-btn, .next-btn, .flip-btn, .final button {
+      margin: 20px auto;
+      display: block;
+      padding: 12px 30px;
+      font-size: 1.1em;
+      border: none;
+      background-color: #ff9ecf;
+      color: white;
+      border-radius: 20px;
+      cursor: pointer;
+      box-shadow: 0 8px 20px rgba(255, 105, 180, 0.5);
+      max-width: 90%;
+    }
+    .card {
+      perspective: 1000px;
+      width: 90vw;
+      max-width: 300px;
+      height: 400px;
+      margin: 20px auto;
+      display: none;
+      position: relative;
+      transition: transform 1s ease, opacity 1s ease;
+    }
+    .slide-in-right {
+      transform: translateX(100vw);
+      opacity: 0;
+    }
+    .slide-in-active {
+      transform: translateX(0);
+      opacity: 1;
+    }
+    .slide-out-left {
+      transform: translateX(-100vw);
+      opacity: 0;
+    }
+    .card-inner {
+      width: 100%;
+      height: 100%;
+      transition: transform 1s;
+      transform-style: preserve-3d;
+      position: relative;
+    }
+    .flipped .card-inner {
+      transform: rotateY(180deg);
+    }
+    .card-front, .card-back {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      backface-visibility: hidden;
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 10px 30px rgba(255,182,193,0.5);
+    }
+    .card-front img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .card-back {
+      background: #fff0f5;
+      transform: rotateY(180deg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.3em;
+      color: #c71585;
+      padding: 15px;
+      text-align: center;
+    }
+    .compliments {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      pointer-events: none;
+      z-index: 999;
+    }
+    .compliment {
+      position: absolute;
+      color: #ff69b4;
+      font-size: 1.5em;
+      animation: fall 10s linear infinite;
+      font-family: 'Bad Script', cursive;
+    }
+    @keyframes fall {
+      0% { top: -50px; opacity: 0; }
+      10% { opacity: 1; }
+      100% { top: 100vh; opacity: 0; }
+    }
+    .petal {
+      position: fixed;
+      top: -50px;
+      width: 20px;
+      height: 20px;
+      background: radial-gradient(circle, pink 0%, transparent 70%);
+      border-radius: 50%;
+      animation: fall 12s linear infinite;
+      pointer-events: none;
+      z-index: 998;
+    }
+    .final {
+      text-align: center;
+      margin-top: 40px;
+      font-size: 1.3em;
+      color: #8b004f;
+      padding: 20px;
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <button class="music-btn" onclick="startStory()">🎵 Включите музыку)</button>
+  <audio id="bg-music" src="music.mp3" loop></audio>
+  <div class="compliments" id="compliments"></div>
+  <div id="cards">
+    <div class="card"><div class="card-inner"><div class="card-front"><img src="girl1.jpg" alt="Фото 1"></div><div class="card-back">Какая же ты прекрасная 🌞</div></div></div>
+    <div class="card"><div class="card-inner"><div class="card-front"><img src="girl2.jpg" alt="Фото 2"></div><div class="card-back">Ты как весна — нежная и тёплая 💐</div></div></div>
+    <div class="card"><div class="card-inner"><div class="card-front"><img src="girl3.jpg" alt="Фото 3"></div><div class="card-back">Твой взгляд может растопить лёд ✨</div></div></div>
+    <div class="card"><div class="card-inner"><div class="card-front"><img src="girl4.jpg" alt="Фото 4"></div><div class="card-back">Ты вдохновляешь одним своим присутствием 🌸</div></div></div>
+    <div class="card"><div class="card-inner"><div class="card-front"><img src="girl5.jpg" alt="Фото 5"></div><div class="card-back">Каждая черта в тебе — искусство 💖</div></div></div>
+    <div class="card"><div class="card-inner"><div class="card-front"><img src="girl6.jpg" alt="Фото 6"></div><div class="card-back">Ты — воплощение красоты и доброты 🌷</div></div></div>
+    <div class="card"><div class="card-inner"><div class="card-front"><img src="girl7.jpg" alt="Фото 7"></div><div class="card-back">В тебе сияет свет, который невозможно не заметить ✨</div></div></div>
+    <div class="card"><div class="card-inner"><div class="card-front"><img src="girl8.jpg" alt="Фото 8"></div><div class="card-back">Ты словно мелодия, которую хочется слушать вечно 🎶</div></div></div>
+  </div>
+  <button class="flip-btn" onclick="flipCard()" style="display:none">Переверни фото 💌</button>
+  <button class="next-btn" onclick="showNextCard()" style="display:none">Дальше)</button>
+  <div class="final" id="final-message">
+    <p>Прости, если отнял твоё время своим далбоебизмом...<br>но я просто хочу познакомиться с тобой 💗</p>
+    <button onclick="handleResponse(true)">Да 💌</button>
+    <button onclick="handleResponse(false)">Нет 🙃</button>
+  </div>
+  <script>
+    const compliments = [
+      "Какая же ты прекрасная 💖", "Ты как весна 🌷", "Ты вдохновляешь ✨",
+      "Невозможно налюбоваться тобой 🌸", "Ты очарование в каждом жесте 💫"
+    ];
+    function spawnCompliment() {
+      const div = document.createElement("div");
+      div.className = "compliment";
+      div.innerText = compliments[Math.floor(Math.random() * compliments.length)];
+      div.style.left = Math.random() * 90 + "%";
+      div.style.animationDuration = (Math.random() * 5 + 5) + "s";
+      document.getElementById("compliments").appendChild(div);
+      setTimeout(() => div.remove(), 10000);
+    }
+    function spawnPetal() {
+      const petal = document.createElement("div");
+      petal.className = "petal";
+      petal.style.left = Math.random() * 100 + "vw";
+      petal.style.animationDuration = (Math.random() * 5 + 7) + "s";
+      document.body.appendChild(petal);
+      setTimeout(() => petal.remove(), 15000);
+    }
+    let current = 0;
+    const cards = document.querySelectorAll('.card');
+    function startStory() {
+      document.querySelector('.music-btn').style.display = 'none';
+      document.getElementById('bg-music').play();
+      setInterval(spawnCompliment, 1500);
+      setInterval(spawnPetal, 800);
+      cards[current].classList.add('slide-in-right');
+      cards[current].style.display = 'block';
+      setTimeout(() => cards[current].classList.add('slide-in-active'), 10);
+      document.querySelector('.flip-btn').style.display = 'block';
+    }
+    function flipCard() {
+      cards[current].classList.add('flipped');
+      document.querySelector('.flip-btn').style.display = 'none';
+      document.querySelector('.next-btn').style.display = 'block';
+    }
+    function showNextCard() {
+      cards[current].classList.remove('slide-in-active');
+      cards[current].classList.add('slide-out-left');
+      setTimeout(() => {
+        cards[current].style.display = 'none';
+        cards[current].classList.remove('flipped', 'slide-in-right', 'slide-out-left');
+        current++;
+        if (current < cards.length) {
+          cards[current].classList.add('slide-in-right');
+          cards[current].style.display = 'block';
+          setTimeout(() => cards[current].classList.add('slide-in-active'), 10);
+          document.querySelector('.flip-btn').style.display = 'block';
+          document.querySelector('.next-btn').style.display = 'none';
+        } else {
+          document.querySelector('.next-btn').style.display = 'none';
+          document.getElementById('final-message').style.display = 'block';
+        }
+      }, 1000);
+    }
+    function handleResponse(answer) {
+      if (answer) {
+        alert('Я очень рад."Кездейсоқ кездесулер-кездейсоқ емес дейді ғой))"');
+      } else {
+        setTimeout(() => {
+          alert('Может, всё-таки дашь шанс?) 🌹');
+        }, 500);
+      }
+    }
+  </script>
+</body>
+</html>
